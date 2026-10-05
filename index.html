@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pathways: legal options and support</title>
+<title>Reclaim.: legal options and support</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:wght@500;700&display=swap">
 <style>
-:root{--bg:#EEF2EF;--card:#fff;--ink:#2B1B3D;--mute:#5d5468;--teal:#2F6F73;--amber:#E0A458;--line:#d5dcd8;--tealbg:#dcebea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171122;--card:#231a33;--ink:#f0eaf6;--mute:#b3a9c2;--teal:#7cc3c6;--line:#3a2f4d;--tealbg:#1f3a3f}}
-:root[data-theme="dark"]{--bg:#171122;--card:#231a33;--ink:#f0eaf6;--mute:#b3a9c2;--teal:#7cc3c6;--line:#3a2f4d;--tealbg:#1f3a3f}
+:root{--bg:#F7ECDD;--card:#fff;--ink:#3A332B;--mute:#7C6F5E;--teal:#4C7BA3;--hero:#B97685;--amber:#E0A83E;--line:#DFCEB4;--tealbg:#E1ECF6;--danger:#CC6E57;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#28221C;--card:#352C23;--ink:#F7EEE1;--mute:#C9B9A4;--teal:#8FB4D9;--hero:#A6717E;--amber:#F0C050;--line:#4A3C2B;--tealbg:#263650;--danger:#E08D77}}
+:root[data-theme="dark"]{--bg:#28221C;--card:#352C23;--ink:#F7EEE1;--mute:#C9B9A4;--teal:#8FB4D9;--hero:#A6717E;--amber:#F0C050;--line:#4A3C2B;--tealbg:#263650;--danger:#E08D77}
 *{box-sizing:border-box}html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:84px}
 h1,h2,h3{font-family:Literata,Georgia,serif;line-height:1.2;margin:0 0 .5rem}
 main{max-width:720px;margin:0 auto;padding:1rem}
 header{display:flex;justify-content:space-between;align-items:center;max-width:720px;margin:0 auto;padding:.75rem 1rem}
 .brand{font-family:Literata,Georgia,serif;font-weight:700;font-size:1.3rem}
-.exit{background:#b3261e;color:#fff;border:0;border-radius:8px;padding:.55rem .9rem;font-weight:700;font-size:.95rem;cursor:pointer}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;margin:.75rem 0}
-.hero{background:var(--ink);color:#fff;border-radius:16px;padding:1.4rem;margin:.5rem 0}
+.hleft{display:flex;align-items:center;gap:.5rem}
+.backbtn{background:transparent;border:1px solid var(--teal);color:var(--teal);border-radius:8px;padding:.45rem .7rem;font-weight:600;font-size:.85rem;cursor:pointer}
+.exit{background:var(--danger);color:#fff;border:0;border-radius:8px;padding:.55rem .9rem;font-weight:700;font-size:.95rem;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;margin:.75rem 0;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.hero{background:var(--hero);color:#fff;border-radius:16px;padding:1.4rem;margin:.5rem 0}
 .hero h1{font-size:1.8rem}.hero p{margin:.4rem 0;color:#e6dff0}
 .hero a{color:var(--amber);font-weight:700}
 .btn{background:var(--teal);color:#fff;border:0;border-radius:8px;padding:.65rem 1rem;font-size:1rem;font-weight:600;cursor:pointer}
@@ -24,81 +26,20 @@ header{display:flex;justify-content:space-between;align-items:center;max-width:7
 details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:.6rem 0;padding:.2rem 1rem}
 summary{cursor:pointer;font-weight:700;padding:.7rem 0;font-family:Literata,Georgia,serif}
 details[open] summary{color:var(--teal)}
+.topicnav{display:flex;flex-wrap:wrap;gap:.5rem;margin:.75rem 0}
+.topicnav button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:.6rem .85rem;font-size:.88rem;font-weight:600;cursor:pointer;flex:1 1 150px}
+.topicnav button[aria-current="true"]{background:var(--teal);color:#fff;border-color:var(--teal)}
+.stepper{list-style:none;margin:1.1rem 0 0;padding:0;counter-reset:s}
+.stepper li{position:relative;padding:.1rem 0 1.25rem 2.1rem;border-left:2px solid var(--line);margin-left:14px}
+.stepper li:last-child{border-color:transparent}
+.stepper li::before{counter-increment:s;content:counter(s);position:absolute;left:-15px;top:-2px;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+:root[data-theme="dark"] .topicnav button[aria-current="true"],:root:not([data-theme="light"]) .topicnav button[aria-current="true"],:root[data-theme="dark"] .stepper li::before,:root:not([data-theme="light"]) .stepper li::before{color:#10202a}
 li{margin:.35rem 0}.note{background:var(--tealbg);border-radius:8px;padding:.6rem .8rem;font-size:.92rem}
+.srcline{font-size:.78rem;color:var(--mute);margin-top:.8rem;padding-top:.6rem;border-top:1px solid var(--line)}
+.srcline a{color:var(--mute);text-decoration:underline}
 .mute{color:var(--mute);font-size:.92rem}
 nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom,0px)}
 nav button{flex:1;background:none;border:0;color:var(--mute);padding:.8rem .2rem;font-size:.85rem;font-weight:600;cursor:pointer;border-top:3px solid transparent}
 nav button[aria-selected="true"]{color:var(--teal);border-top-color:var(--teal)}
 input[type=search]{width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;font-size:1rem;background:var(--card);color:var(--ink)}
-.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0}
-.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:.35rem .8rem;font-size:.9rem;cursor:pointer}
-.chip[aria-pressed="true"]{background:var(--teal);color:#fff;border-color:var(--teal)}
-label.row{display:flex;gap:.6rem;align-items:flex-start;padding:.55rem 0;border-bottom:1px solid var(--line)}
-label.row input{margin-top:.3rem;width:1.1rem;height:1.1rem}
-.tag{font-size:.8rem;color:var(--teal);font-weight:700}
-a{color:var(--teal)}
-button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
-[hidden]{display:none!important}
-</style></head><body>
-<header><span class="brand">Pathways</span><button class="exit" id="exit" aria-label="Quick exit to a weather site">Quick exit</button></header>
-<main id="app"></main>
-<nav role="tablist" id="nav"></nav>
-<script>
-const TABS=[["home","Home"],["learn","Learn"],["roadmap","My roadmap"],["help","Find help"],["safety","Safety plan"]];
-const TOPICS=[
-{id:"orders",t:"Protective orders",s:"A court order that can require someone to stay away, leave a shared home, or stop contacting you. Names vary: order of protection, restraining order, injunction.",
- st:["Ask the court clerk or a domestic violence advocate for the petition forms. Filing is usually free.","Write down dates, threats, and what happened. Save texts, photos, medical records, and police reports.","A temporary order can often be granted the same day, before the other person is heard. A full hearing follows, usually within weeks.","Ask what the order can include: custody, pets, firearms limits, and keeping your address private."]},
-{id:"housing",t:"Housing and leases",s:"You may be able to leave a lease early or move without losing your housing rights.",
- st:["Federal VAWA rules protect many people in public or subsidized housing from eviction because of abuse, and allow emergency transfers.","Many states let survivors end a lease early. It often requires written notice and documentation from an advocate, court, or police.","Ask your housing authority or landlord for an emergency transfer in writing and keep a copy.","Call a shelter hotline if you need a safe place tonight."]},
-{id:"kids",t:"Children and custody",s:"Courts look at safety when deciding custody and visits.",
- st:["A protective order can ask for temporary custody and supervised visits.","Keep a record of incidents involving your children, and school or doctor notes.","Talk to legal aid before moving to another state with your children, because it can affect custody.","Ask about a guardian ad litem, a person who speaks for the child's interests."]},
-{id:"money",t:"Money and work",s:"Financial control is a form of abuse, and there are ways to rebuild independence.",
- st:["Every state has a crime victim compensation program that can help pay for medical bills, counseling, and relocation costs.","Many states protect leave from work for court dates and safety needs, and some allow unemployment benefits if you had to leave a job for safety.","Open an account in your name only, using a safe address, and check your credit report for accounts you did not open.","Ask a court about support, and about who pays for the shared home."]},
-{id:"immigration",t:"Immigration options",s:"Your immigration status should not stop you from getting protection.",
- st:["A VAWA self-petition lets some spouses and children of a U.S. citizen or permanent resident apply without the abuser knowing or helping.","A U visa can protect victims of certain crimes who help law enforcement, and a T visa protects victims of trafficking.","Talk to an immigration attorney or accredited representative before filing anything. Many nonprofits offer free help.","Courts and shelters generally help regardless of status. Ask an advocate about your rights first."]},
-{id:"address",t:"Keeping your address private",s:"Some states let you use a substitute address so an abuser cannot find you through public records.",
- st:["Many states run an Address Confidentiality Program. Missouri's is called Safe at Home and is run by the Secretary of State.","Enrollment usually goes through a trained advocate who helps you apply.","Ask about hiding your address in voter, court, and vehicle records.","Use the P.O. box or substitute address for mail, school, and work forms."]},
-{id:"digital",t:"Phone and online safety",s:"Abusers sometimes track phones, accounts, and locations.",
- st:["If you think your phone is monitored, use a different device, such as a library computer or a friend's phone, to plan.","Check location sharing, linked accounts, and unknown apps. Change passwords and turn on two-step login.","Screenshot threatening messages before blocking anyone, and keep copies off the shared device.","Removing tracking software can alert the person, so get advice before changing anything if you feel unsafe."]}];
-const RES=[
-{n:"911",d:"Immediate danger. Emergency police, fire, and medical help.",c:["Emergency"],p:"911"},
-{n:"National Domestic Violence Hotline",d:"24/7, free, confidential. Advocates can help you find shelter and legal help near you. Text START to 88788 or chat at thehotline.org.",c:["Emergency","Shelter","Legal"],p:"1-800-799-7233"},
-{n:"988 Suicide & Crisis Lifeline",d:"Call or text if you are in emotional crisis.",c:["Emotional"],p:"988"},
-{n:"StrongHearts Native Helpline",d:"Support for Native Americans and Alaska Natives facing abuse.",c:["Emergency","Shelter"],p:"1-844-762-8483"},
-{n:"Love Is Respect",d:"Support for teens and young adults in unhealthy relationships. Text LOVEIS to 22522.",c:["Emergency","Emotional"],p:"1-866-331-9474"},
-{n:"RAINN",d:"Support after sexual assault.",c:["Emotional","Emergency"],p:"1-800-656-4673"},
-{n:"WomensLaw.org",d:"Plain-language legal information for every state, plus forms and an email helpline.",c:["Legal"],u:"womenslaw.org"},
-{n:"LawHelp.org",d:"Find free legal aid in your state.",c:["Legal"],u:"lawhelp.org"},
-{n:"Missouri Coalition Against Domestic and Sexual Violence",d:"Connects to local programs and shelters across Missouri.",c:["Shelter","Legal"],u:"mocadsv.org"},
-{n:"Immigration Advocates Network legal directory",d:"Find nonprofit immigration legal help.",c:["Immigration","Legal"],u:"immigrationlawhelp.org"},
-{n:"Crime victim compensation boards",d:"Find your state's program for help paying medical and relocation costs.",c:["Money"],u:"nacvcb.org"}];
-const CATS=["All","Emergency","Shelter","Legal","Immigration","Money","Emotional"];
-const QS=[["I need to be safe from someone right now or soon",["orders","digital"]],["We share a home or a lease",["housing","orders"]],["We have children together",["kids","orders"]],["They control money, or I am worried about work",["money"]],["My immigration status is tied to them, or I am not a citizen",["immigration"]],["I am worried they will find where I live",["address","digital"]],["They track my phone or accounts",["digital"]]];
-const $=s=>document.querySelector(s),app=$("#app");
-let tab="home",cat="All",q="",picked=new Set(),checks=new Set(),open=null;
-function go(t,o){tab=t;open=o||null;render();scrollTo(0,0)}
-function nav(){$("#nav").innerHTML=TABS.map(([k,l])=>`<button role="tab" aria-selected="${k==tab}" onclick="go('${k}')">${l}</button>`).join("")}
-function topicHTML(x){return `<details id="t-${x.id}" ${open==x.id?"open":""}><summary>${x.t}</summary><p>${x.s}</p><ul>${x.st.map(i=>`<li>${i}</li>`).join("")}</ul></details>`}
-function contact(r){return r.p?`<a href="tel:${r.p.replace(/[^0-9]/g,"")}"><b>${r.p}</b></a>`:`<a href="https://${r.u}" target="_blank" rel="noopener">${r.u}</a>`}
-const V={
-home:()=>`<div class="hero"><h1>You have options.</h1><p>Learn how the law can protect you, build a personal list of next steps, and find people who can help. Nothing you do here is saved or sent anywhere.</p><p>In danger now? Call <a href="tel:911">911</a>. For support any time: <a href="tel:18007997233">1-800-799-7233</a>.</p></div>
-<div class="card"><h3>Start here</h3><p class="mute">Answer a few questions to see which legal topics apply to you.</p><button class="btn" onclick="go('roadmap')">Build my roadmap</button> <button class="btn alt" onclick="go('learn')">Browse topics</button></div>
-<div class="card"><h3>Good to know</h3><p>This app shares general legal information, not legal advice. Laws differ by state and change. A legal aid organization can tell you what applies to your case, often for free.</p><p class="note">To leave this page quickly, press the red Quick exit button or press Escape twice.</p></div>`,
-learn:()=>`<h2>Learn</h2><p class="mute">Tap a topic to see how it works and what to do first.</p>${TOPICS.map(topicHTML).join("")}`,
-roadmap:()=>{const ids=[...new Set(QS.flatMap((x,i)=>picked.has(i)?x[1]:[]))];
-return `<h2>My roadmap</h2><p class="mute">Check anything that applies. You can skip any question.</p><div class="card">${QS.map((x,i)=>`<label class="row"><input type="checkbox" ${picked.has(i)?"checked":""} onchange="tg(${i})"><span>${x[0]}</span></label>`).join("")}</div>
-${ids.length?`<h3>Topics to read first</h3>${ids.map(id=>{const x=TOPICS.find(t=>t.id==id);return `<div class="card"><b>${x.t}</b><p class="mute">${x.s}</p><button class="btn alt" onclick="go('learn','${id}')">Read this topic</button></div>`}).join("")}<div class="card"><b>Next step for everyone</b><p>Talk to an advocate or legal aid organization about your state. See <a href="#" onclick="go('help');return false">Find help</a>.</p></div>`:`<p class="mute">Your topics will appear here.</p>`}`},
-help:()=>{const L=RES.filter(r=>(cat=="All"||r.c.includes(cat))&&(r.n+r.d).toLowerCase().includes(q.toLowerCase()));
-return `<h2>Find help</h2><input type="search" id="q" placeholder="Search organizations" value="${q}" aria-label="Search organizations"><div class="chips">${CATS.map(c=>`<button class="chip" aria-pressed="${c==cat}" onclick="cat='${c}';render()">${c}</button>`).join("")}</div>
-<p class="note">Need shelter? Call the National Hotline. They can find open beds near you.</p>${L.map(r=>`<div class="card"><b>${r.n}</b><div class="tag">${r.c.join(", ")}</div><p>${r.d}</p>${contact(r)}</div>`).join("")||"<p class='mute'>No matches. Try a different word or category.</p>"}
-<p class="mute">Confirm details before relying on them. Contact information can change.</p>`},
-safety:()=>{const I=["Keep copies of ID, birth certificates, lease, and bank details somewhere safe outside your home","Pack a small bag: medicine, keys, cash, phone charger, clothes for you and your children","Pick a trusted person and agree on a code word that means you need help","Memorize the hotline number: 1-800-799-7233","Plan two ways out of each room and building where you spend time","Save evidence (photos, messages, dates) somewhere the other person cannot reach","Use a safe device to search and plan, such as a library computer"];
-return `<h2>Safety plan</h2><p class="mute">A checklist to think through. Your ticks stay on this screen only and disappear when you close it.</p><div class="card">${I.map((x,i)=>`<label class="row"><input type="checkbox" ${checks.has(i)?"checked":""} onchange="tc(${i})"><span>${x}</span></label>`).join("")}</div><button class="btn alt" onclick="checks.clear();render()">Clear checklist</button>`}};
-function tg(i){picked.has(i)?picked.delete(i):picked.add(i);render()}
-function tc(i){checks.has(i)?checks.delete(i):checks.add(i)}
-function render(){nav();app.innerHTML=V[tab]();const s=$("#q");if(s){s.oninput=e=>{q=e.target.value;const p=e.target.selectionStart;render();const n=$("#q");n.focus();n.setSelectionRange(p,p)}}
-if(open){const el=document.getElementById("t-"+open);if(el)el.scrollIntoView()}}
-function leave(){location.replace("https://weather.com")}
-$("#exit").onclick=leave;let last=0;addEventListener("keydown",e=>{if(e.key=="Escape"){const n=Date.now();if(n-last<800)leave();last=n}});
-render();
-</script></body></html>
+.chips{display:flex;flex
