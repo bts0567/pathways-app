@@ -42,4 +42,191 @@ nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px
 nav button{flex:1;background:none;border:0;color:var(--mute);padding:.8rem .2rem;font-size:.85rem;font-weight:600;cursor:pointer;border-top:3px solid transparent}
 nav button[aria-selected="true"]{color:var(--teal);border-top-color:var(--teal)}
 input[type=search]{width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;font-size:1rem;background:var(--card);color:var(--ink)}
-.chips{display:flex;flex
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:.35rem .8rem;font-size:.9rem;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--teal);color:#fff;border-color:var(--teal)}
+label.row{display:flex;gap:.6rem;align-items:flex-start;padding:.55rem 0;border-bottom:1px solid var(--line)}
+label.row input{margin-top:.3rem;width:1.1rem;height:1.1rem}
+.tag{font-size:.8rem;color:var(--teal);font-weight:700}
+a{color:var(--teal)}
+button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+[hidden]{display:none!important}
+.typegrid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.5rem 0}
+.typecard{background:var(--tealbg);border-radius:8px;padding:.6rem .7rem}
+.typecard b{font-size:.88rem}.typecard p{margin:.25rem 0 0;font-size:.85rem;color:var(--mute)}
+@media(max-width:480px){.typegrid{grid-template-columns:1fr}}
+@media print{header,nav,.btn,.chip,select,input,.exit{display:none!important}body{padding-bottom:0}}
+</style></head><body>
+<header><div class="hleft"><button id="backBtn" class="backbtn" hidden aria-label="Go back">&larr; Back</button><span class="brand">Reclaim.</span></div><button class="exit" id="exit" aria-label="Quick exit to a weather site">Quick exit</button></header>
+<main id="app"></main>
+<nav role="tablist" id="nav"></nav>
+<script>
+const TABS=[["home","Home"],["learn","Learn"],["roadmap","My roadmap"],["help","Find help"],["safety","Safety plan"]];
+const STATES=[["AL","Alabama"],["AK","Alaska"],["AZ","Arizona"],["AR","Arkansas"],["CA","California"],["CO","Colorado"],["CT","Connecticut"],["DE","Delaware"],["DC","District of Columbia"],["FL","Florida"],["GA","Georgia"],["HI","Hawaii"],["ID","Idaho"],["IL","Illinois"],["IN","Indiana"],["IA","Iowa"],["KS","Kansas"],["KY","Kentucky"],["LA","Louisiana"],["ME","Maine"],["MD","Maryland"],["MA","Massachusetts"],["MI","Michigan"],["MN","Minnesota"],["MS","Mississippi"],["MO","Missouri"],["MT","Montana"],["NE","Nebraska"],["NV","Nevada"],["NH","New Hampshire"],["NJ","New Jersey"],["NM","New Mexico"],["NY","New York"],["NC","North Carolina"],["ND","North Dakota"],["OH","Ohio"],["OK","Oklahoma"],["OR","Oregon"],["PA","Pennsylvania"],["RI","Rhode Island"],["SC","South Carolina"],["SD","South Dakota"],["TN","Tennessee"],["TX","Texas"],["UT","Utah"],["VT","Vermont"],["VA","Virginia"],["WA","Washington"],["WV","West Virginia"],["WI","Wisconsin"],["WY","Wyoming"]];
+function stName(ab){return (STATES.find(s=>s[0]==ab)||[,ab])[1]}
+function wlHub(ab){return `https://www.womenslaw.org/laws/${ab.toLowerCase()}`}
+function wlOrders(ab){return `https://www.womenslaw.org/laws/${ab.toLowerCase()}/restraining-orders`}
+const TOPICS=[
+{id:"orders",t:"Protective orders",s:ab=>`A court order that can require someone to stay away, leave a shared home, or stop contacting you (names vary: order of protection, restraining order, injunction). Most states, including ${stName(ab)}, use two stages: a temporary order a judge can often grant the same day, and a full order after a hearing where both sides are heard.`,
+ st:ab=>ab=="MO"?["Figure out which petition fits: an Adult Order of Protection (spouses, family, dating partners, household members) or a Child Order of Protection. <a href='https://www.courts.mo.gov/page.jsp?id=533' target='_blank' rel='noopener'>See courts.mo.gov overview</a>.",
+ "Get the petition (form SJRC/AA40) free from your county circuit clerk, or download it. <a href='https://www.courts.mo.gov/page.jsp?id=383' target='_blank' rel='noopener'>Download Missouri court forms</a>.",
+ "File at the circuit court in the county where you or the other person lives. Courts can issue an emergency ex parte order the same day, including after hours in urgent cases.",
+ "If granted, you'll get a hearing date for a full order, usually within about 15 days. You must attend the hearing to keep protection in place.",
+ "Once issued, the order goes into MULES (Missouri's statewide law enforcement system) within 24 hours, so any officer in the state can enforce it.",
+ "Find your county courthouse: <a href='https://www.courts.mo.gov' target='_blank' rel='noopener'>courts.mo.gov</a>."]
+ :["Get the petition forms free from your county or district courthouse clerk. Ask specifically about an emergency/temporary order if you're in immediate danger.",
+ "File at the court in the county where you or the other person lives. Many courts can issue a same-day emergency order before the other person is even notified.",
+ "If a temporary order is granted, you'll get a date for a full hearing. You must attend it to keep protection in place long-term.",
+ "The exact forms, deadlines, and what the order can include (custody, pets, firearms, address privacy) differ by state. Don't guess, check your state's page below."],
+ wl:ab=>[["Exact forms, process, and definitions for "+stName(ab),wlOrders(ab)]],
+ types:[{t:"Domestic violence / order of protection",d:"For spouses, former spouses, dating partners, and family or household members."},
+ {t:"Child protection order",d:"Protects a minor; usually filed by a parent or guardian, sometimes against a non-household member."},
+ {t:"Civil harassment / stalking order",d:"For threats, harassment, or stalking from someone you don't have a close relationship with: a neighbor, acquaintance, or stranger."},
+ {t:"Elder or dependent adult abuse order",d:"For abuse of an elderly or dependent adult; sometimes requestable by someone acting on their behalf."},
+ {t:"Workplace violence order",d:"In some states, an employer can request this on behalf of an employee facing threats at work."}]},
+{id:"housing",t:"Housing and leases",s:"You may be able to leave a lease early or move without losing your housing rights.",
+ st:ab=>[ab=="MO"?"Missouri lets survivors end a private lease early with documentation such as a protective order, police report, or advocate letter. Ask a legal aid attorney about current requirements.":"Many states let survivors end a private lease early with documentation such as a protective order, police report, or advocate letter. Check your state's exact rule below, since requirements differ.",
+ "If you live in public or subsidized housing, federal VAWA protections can prevent eviction because of abuse and allow an emergency transfer nationwide. <a href='https://www.hud.gov/program_offices/public_indian_housing/programs/public/vawa' target='_blank' rel='noopener'>HUD – VAWA housing protections</a>.",
+ "Ask your housing authority or landlord in writing for an emergency transfer, and keep a copy of the request.",
+ "Call a shelter hotline if you need a safe place tonight. See the Find help tab."],
+ wl:ab=>[["Housing and other legal topics for "+stName(ab),wlHub(ab)]]},
+{id:"kids",t:"Children and custody",s:"Courts look at safety when deciding custody and visits.",
+ st:["A protective order can often ask for temporary custody and supervised or no visitation.",
+ "Keep a record of incidents involving your children, plus school or doctor notes.",
+ "Talk to legal aid before moving to another state with your children, since it can affect which state has custody jurisdiction.",
+ "Ask about a guardian ad litem, a person appointed to speak for the child's interests."],
+ wl:ab=>[["Custody rules for "+stName(ab),wlHub(ab)]]},
+{id:"money",t:"Money and work",s:"Financial control is a form of abuse, and there are ways to rebuild independence.",
+ st:ab=>[ab=="MO"?"Missouri's Crime Victims' Compensation program can help pay medical bills, counseling, and relocation costs for eligible victims. <a href='https://dps.mo.gov/dir/programs/cvsu/' target='_blank' rel='noopener'>Missouri DPS – Crime Victims' Services</a>.":`Every state runs a crime victims' compensation program that can help pay medical bills, counseling, and relocation costs. Ask a local victim advocate, or search "${stName(ab)} crime victims compensation."`,
+ "Ask about job-protected leave for court dates and safety needs, and whether you qualify for unemployment if you left a job for safety.",
+ "Open an account in your name only, using a safe address, and check your credit report for accounts you didn't open.",
+ "A court can order support, and decide who is responsible for a shared home or shared debts."],
+ wl:ab=>ab=="MO"?[["Missouri DPS – Crime Victims' Services",'https://dps.mo.gov/dir/programs/cvsu/']]:[["Legal topics for "+stName(ab),wlHub(ab)]]},
+{id:"immigration",t:"Immigration options",s:"Your immigration status should not stop you from getting protection.",
+ st:["A VAWA self-petition lets some spouses, children, and parents of a U.S. citizen or permanent resident apply for status without the abuser's knowledge or help. <a href='https://www.uscis.gov/humanitarian/battered-spouse-children-parents' target='_blank' rel='noopener'>USCIS – VAWA self-petitions</a>.",
+ "A U visa can protect victims of certain crimes who help law enforcement; a T visa protects trafficking victims. <a href='https://www.uscis.gov/humanitarian/victims-of-human-trafficking-and-other-crimes' target='_blank' rel='noopener'>USCIS – U and T visas</a>.",
+ "Talk to an immigration attorney or DOJ-accredited representative before filing anything. Many nonprofits offer this for free.",
+ "Courts and shelters generally help regardless of immigration status. Ask an advocate about your rights first."],
+ wl:()=>[["USCIS – VAWA self-petitions","https://www.uscis.gov/humanitarian/battered-spouse-children-parents"],["USCIS – U and T visas","https://www.uscis.gov/humanitarian/victims-of-human-trafficking-and-other-crimes"]]},
+{id:"address",t:"Keeping your address private",s:ab=>ab=="MO"?"Missouri's Safe at Home program lets survivors use a substitute address so an abuser can't find them through public records (RSMo 589.660–589.683).":`About 40 states run some kind of Address Confidentiality Program, usually through the Secretary of State's office (sometimes called "Safe at Home" or "ACP"), letting survivors use a substitute address on public records.`,
+ st:ab=>ab=="MO"?["Run by the Missouri Secretary of State's office, free to join, for adult or child victims of domestic violence, rape, sexual assault, or stalking who fear further harm.",
+ "You apply in person with a trained 'application assistant,' usually a domestic violence advocate, not directly online.",
+ "Once enrolled, you can use your designated substitute address on voter registration, state agency records, and more, keeping your real address out of public records.",
+ "Find an application assistant through a local shelter (see Find help), or learn more at <a href='https://www.sos.mo.gov' target='_blank' rel='noopener'>sos.mo.gov</a> (search 'Safe at Home')."]
+ :[`Check whether ${stName(ab)} has a program: ask a local shelter advocate, or search "${stName(ab)} address confidentiality program."`,
+ "Enrollment is usually free and goes through a trained advocate or state office, not a direct online form.",
+ "If enrolled, you typically get a substitute address to use on voter registration, school, and other public records so your real address stays private."],
+ wl:ab=>ab=="MO"?[["Missouri Secretary of State","https://www.sos.mo.gov"]]:[["Legal topics for "+stName(ab),wlHub(ab)]]},
+{id:"digital",t:"Phone and online safety",s:"Abusers sometimes track phones, accounts, and locations.",
+ st:["If you think your phone is monitored, use a different device (a library computer or a friend's phone) to plan.",
+ "Check location sharing, linked accounts, and unknown apps. Change passwords and turn on two-step login.",
+ "Screenshot threatening messages before blocking anyone, and keep copies off the shared device.",
+ "Removing tracking software can alert the person, so get advice before changing anything if you feel unsafe.",
+ "Detailed technology safety guides: <a href='https://www.techsafety.org' target='_blank' rel='noopener'>techsafety.org</a> (National Network to End Domestic Violence)."],
+ wl:()=>[["NNEDV Safety Net Project","https://www.techsafety.org"]]}];
+const RES=[
+{n:"911",d:"Immediate danger. Emergency police, fire, and medical help.",c:["Emergency"],p:"911"},
+{n:"National Domestic Violence Hotline",d:"24/7, free, confidential. Advocates can help you find shelter and legal help near you. Text START to 88788 or chat at thehotline.org.",c:["Emergency","Shelter","Legal"],p:"1-800-799-7233"},
+{n:"True North of Columbia, Inc.",d:"24/7 hotline and confidential emergency shelter for Boone County and surrounding Missouri counties. Also offers court and hospital advocacy.",c:["Emergency","Shelter"],p:"1-800-548-2480"},
+{n:"DomesticShelters.org",d:"Searchable, regularly updated directory of real shelters and programs by city and state, nationwide.",c:["Shelter"],u:"domesticshelters.org"},
+{n:"211",d:"Dial or search online to reach local health and human-service referrals, including emergency shelter, in your area.",c:["Shelter","Money"],u:"211.org"},
+{n:"988 Suicide & Crisis Lifeline",d:"Call or text if you are in emotional crisis.",c:["Emotional"],p:"988"},
+{n:"StrongHearts Native Helpline",d:"Support for Native Americans and Alaska Natives facing abuse.",c:["Emergency","Shelter"],p:"1-844-762-8483"},
+{n:"Love Is Respect",d:"Support for teens and young adults in unhealthy relationships. Text LOVEIS to 22522.",c:["Emergency","Emotional"],p:"1-866-331-9474"},
+{n:"RAINN",d:"Support after sexual assault.",c:["Emotional","Emergency"],p:"1-800-656-4673"},
+{n:"WomensLaw.org",d:"Plain-language legal information for every state, plus forms and an email helpline.",c:["Legal"],u:"womenslaw.org"},
+{n:"LawHelp.org",d:"Find free legal aid in your state.",c:["Legal"],u:"lawhelp.org"},
+{n:"Missouri Coalition Against Domestic and Sexual Violence",d:"Connects to local programs and shelters across Missouri.",c:["Shelter","Legal"],u:"mocadsv.org"},
+{n:"Immigration Advocates Network legal directory",d:"Find nonprofit immigration legal help.",c:["Immigration","Legal"],u:"immigrationlawhelp.org"},
+{n:"Crime victim compensation boards",d:"Find your state's program for help paying medical and relocation costs.",c:["Money"],u:"nacvcb.org"}];
+const CATS=["All","Emergency","Shelter","Legal","Immigration","Money","Emotional"];
+const SAFETY=[
+{h:"Get ready, before you need it",d:"Things that are easier to do when things are calm.",items:[
+ "Keep copies of ID, birth certificate, Social Security card, lease or mortgage papers, and bank info somewhere outside the home: a trusted friend, relative, or safe deposit box.",
+ "Write down important phone numbers somewhere the other person won't find, in case your phone isn't safe to use.",
+ "Set aside a small amount of cash if you can.",
+ "Save evidence (photos, messages, dates of incidents) somewhere the other person cannot access.",
+ "Identify a trusted neighbor, friend, or family member you can call or go to."]},
+{h:"If you need to leave quickly",d:"A plan for the moment you need to go.",items:[
+ "Pack a small bag: medicine, keys, chargers, and a change of clothes for you and your children.",
+ "Plan two ways out of each room and the building where you spend time.",
+ "Agree on a code word with someone you trust that means \"call for help\" or \"come get me.\"",
+ "Know where you'll go: a shelter, a friend's house, or a public place.",
+ "If you have pets, know which shelters or friends can take them in. Some shelters, including local ones, accept pets."]},
+{h:"Staying safer after you leave",d:"Steps for the days and weeks after.",items:[
+ "Change locks, passwords, and PINs if the other person had access to them.",
+ "Consider a protective order. See the Learn tab for your state's process.",
+ "Tell trusted people at work, school, or your children's school what's happening.",
+ "Look into keeping your new address private. See Learn → Keeping your address private.",
+ "Check your phone, car, and belongings for trackers if you're worried about monitoring."]},
+{h:"Keep close by",d:"Numbers worth memorizing or writing down somewhere safe.",items:[
+ "911 for immediate danger.",
+ "1-800-799-7233: National Domestic Violence Hotline, 24/7.",
+ "Your local shelter's hotline. See the Find help tab.",
+ "One trusted person's number memorized, in case your phone isn't available."]}];
+const QS=[["I need to be safe from someone right now or soon",["orders","digital"]],["We share a home or a lease",["housing","orders"]],["We have children together",["kids","orders"]],["They control money, or I am worried about work",["money"]],["My immigration status is tied to them, or I am not a citizen",["immigration"]],["I am worried they will find where I live",["address","digital"]],["They track my phone or accounts",["digital"]]];
+const $=s=>document.querySelector(s),app=$("#app");
+let tab="home",cat="All",q="",picked=new Set(),checks=new Set(),learnSel=TOPICS[0].id,learnState="MO",nearQ="",hist=[];
+function go(t,o){if(t!==tab)hist.push({tab,learnSel});tab=t;if(t=="learn"&&o)learnSel=o;render();scrollTo(0,0)}
+function backNav(){if(!hist.length)return;const p=hist.pop();tab=p.tab;learnSel=p.learnSel;render();scrollTo(0,0)}
+function nav(){$("#nav").innerHTML=TABS.map(([k,l])=>`<button role="tab" aria-selected="${k==tab}" onclick="go('${k}')">${l}</button>`).join("")}
+function selTopic(id){learnSel=id;render();scrollTo(0,0)}
+function setState(v){learnState=v;render()}
+function getS(x){return typeof x.s=="function"?x.s(learnState):x.s}
+function getSt(x){return typeof x.st=="function"?x.st(learnState):x.st}
+function getWl(x){return x.wl?x.wl(learnState):[]}
+function contact(r){return r.p?`<a href="tel:${r.p.replace(/[^0-9]/g,"")}"><b>${r.p}</b></a>`:`<a href="https://${r.u}" target="_blank" rel="noopener">${r.u}</a>`}
+const V={
+home:()=>`<div class="hero"><h1>You have options.</h1><p>Learn how the law can protect you, build a personal list of next steps, and find people who can help. Nothing you do here is saved or sent anywhere.</p><p>In danger now? Call <a href="tel:911">911</a>. For support any time: <a href="tel:18007997233">1-800-799-7233</a>.</p></div>
+<div class="card"><h3>Start here</h3><p class="mute">Answer a few questions to see which legal topics apply to you.</p><button class="btn" onclick="go('roadmap')">Build my roadmap</button> <button class="btn alt" onclick="go('learn')">Browse topics</button></div>
+<div class="card"><h3>Good to know</h3><p>This app shares general legal information, not legal advice. Laws differ by state and change. A legal aid organization can tell you what applies to your case, often for free.</p><p class="note">To leave this page quickly, press the red Quick exit button or press Escape twice.</p></div>`,
+learn:()=>{const cur=TOPICS.find(t=>t.id==learnSel)||TOPICS[0],wl=getWl(cur);
+return `<h2>Learn</h2><p class="mute">Choose your state, pick a topic, then follow the steps in order.</p>
+<label class="mute" for="stateSel">State</label><br><select id="stateSel" onchange="setState(this.value)" style="width:100%;padding:.6rem;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font-size:1rem;margin:.3rem 0 .5rem">${STATES.map(s=>`<option value="${s[0]}" ${s[0]==learnState?"selected":""}>${s[1]}</option>`).join("")}</select>
+<div class="topicnav">${TOPICS.map(x=>`<button aria-current="${x.id==cur.id}" onclick="selTopic('${x.id}')">${x.t}</button>`).join("")}</div>
+<div class="card"><h3>${cur.t} in ${stName(learnState)}</h3><p>${getS(cur)}</p>
+${cur.types?`<p class="mute"><b>Common types. Check which fits your situation:</b></p><div class="typegrid">${cur.types.map(x=>`<div class="typecard"><b>${x.t}</b><p>${x.d}</p></div>`).join("")}</div><p class="mute" style="margin-top:.8rem"><b>Filing steps once you know which type:</b></p>`:""}
+<ol class="stepper">${getSt(cur).map(s=>`<li>${s}</li>`).join("")}</ol>
+${wl.length?`<p class="srcline">Source: ${wl.map(([label,url])=>`<a href="${url}" target="_blank" rel="noopener">${label}</a>`).join(" · ")}</p>`:""}</div>`},
+roadmap:()=>{const ids=[...new Set(QS.flatMap((x,i)=>picked.has(i)?x[1]:[]))];
+return `<h2>My roadmap</h2><p class="mute">Check anything that applies. You can skip any question.</p><div class="card">${QS.map((x,i)=>`<label class="row"><input type="checkbox" ${picked.has(i)?"checked":""} onchange="tg(${i})"><span>${x[0]}</span></label>`).join("")}</div>
+${ids.length?`<h3>Topics to read first</h3>${ids.map(id=>{const x=TOPICS.find(t=>t.id==id);return `<div class="card"><b>${x.t}</b><p class="mute">${getS(x)}</p><button class="btn alt" onclick="go('learn','${id}')">Read this topic</button></div>`}).join("")}<div class="card"><b>Next step for everyone</b><p>Talk to an advocate or legal aid organization about your state. See <a href="#" onclick="go('help');return false">Find help</a>.</p></div>`:`<p class="mute">Your topics will appear here.</p>`}`},
+help:()=>{const L=RES.filter(r=>(cat=="All"||r.c.includes(cat))&&(r.n+r.d).toLowerCase().includes(q.toLowerCase()));
+return `<h2>Find help</h2>
+<div class="card"><b>Find shelters by location</b><p class="mute">Type a city, state, region, or exact address, or use your device's location. Nothing is saved.</p>
+<input type="search" id="locQ" placeholder="e.g. Columbia, MO or a street address" value="${nearQ}" aria-label="Location search">
+<div style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap"><button class="btn" onclick="searchLoc()">Search this location</button><button class="btn alt" onclick="nearMe()">Use my location</button></div>
+<p id="nearMsg" class="mute"></p></div>
+<input type="search" id="q" placeholder="Search organizations" value="${q}" aria-label="Search organizations"><div class="chips">${CATS.map(c=>`<button class="chip" aria-pressed="${c==cat}" onclick="cat='${c}';render()">${c}</button>`).join("")}</div>
+<p class="note">Need shelter right now? Call the National Hotline. Advocates can find open beds near you.</p>${L.map(r=>`<div class="card"><b>${r.n}</b><div class="tag">${r.c.join(", ")}</div><p>${r.d}</p>${contact(r)}</div>`).join("")||"<p class='mute'>No matches. Try a different word or category.</p>"}
+<p class="mute">Confirm details before relying on them. Contact information can change.</p>`},
+safety:()=>{let i=-1;const total=SAFETY.reduce((a,s)=>a+s.items.length,0),done=checks.size,pct=Math.round(100*done/total);
+const sections=SAFETY.map(sec=>`<div class="card"><h3>${sec.h}</h3><p class="mute">${sec.d}</p>${sec.items.map(it=>{i++;const idx=i;return `<label class="row"><input type="checkbox" ${checks.has(idx)?"checked":""} onchange="tc(${idx})"><span>${it}</span></label>`}).join("")}</div>`).join("");
+return `<h2>Safety plan</h2><p class="mute">A checklist to think through, grouped by when you'd use it. Checks stay on this screen only and clear when you close the page.</p>
+<div class="card"><b>${done} of ${total} steps checked</b><div style="background:var(--line);border-radius:999px;height:8px;margin-top:.5rem;overflow:hidden"><div style="background:var(--teal);height:100%;width:${pct}%"></div></div></div>
+${sections}
+<div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="btn alt" onclick="checks.clear();render()">Clear checklist</button><button class="btn" onclick="window.print()">Print or save this page</button></div>
+<p class="mute" style="margin-top:.5rem">Printing makes a paper or PDF copy on your own device. Nothing is uploaded or sent anywhere.</p>`}};
+function searchLoc(){const v=$("#locQ").value.trim();const m=$("#nearMsg");if(!v){m.textContent="Type a city, state, region, or address first.";return}
+nearQ=v;window.open(`https://www.google.com/maps/search/domestic+violence+shelter+near+${encodeURIComponent(v)}`,"_blank","noopener");
+m.textContent=`Opened a map search near "${v}" in a new tab.`}
+function nearMe(){const m=$("#nearMsg");
+if(!navigator.geolocation){m.textContent="This browser doesn't support location search. Type a city or address above instead.";return}
+if(location.protocol!=="https:"&&location.hostname!=="localhost"){m.textContent="Location only works on a secure (https) page. Type a city or address above instead.";return}
+m.textContent="Finding your location. Your browser may ask for permission...";
+navigator.geolocation.getCurrentPosition(
+ p=>{const{latitude:la,longitude:lo}=p.coords;
+ window.open(`https://www.google.com/maps/search/domestic+violence+shelter/@${la},${lo},12z`,"_blank","noopener");
+ m.textContent="Opened a map search near you in a new tab."},
+ e=>{const msgs={1:"Location permission was denied. Check your browser's site settings to allow it, or just type a city or address above.",2:"Your location isn't available right now. Type a city or address above instead.",3:"Finding your location took too long. Type a city or address above instead."};
+ m.textContent=msgs[e.code]||"Couldn't get your location. Type a city or address above instead."},
+ {enableHighAccuracy:false,timeout:10000,maximumAge:300000})}
+function tg(i){picked.has(i)?picked.delete(i):picked.add(i);render()}
+function tc(i){checks.has(i)?checks.delete(i):checks.add(i)}
+function render(){nav();app.innerHTML=V[tab]();const s=$("#q");if(s){s.oninput=e=>{q=e.target.value;const p=e.target.selectionStart;render();const n=$("#q");n.focus();n.setSelectionRange(p,p)}}
+const l=$("#locQ");if(l){l.oninput=e=>nearQ=e.target.value;l.onkeydown=e=>{if(e.key=="Enter")searchLoc()}}
+const b=$("#backBtn");b.hidden=!hist.length;b.onclick=backNav}
+function leave(){location.replace("https://weather.com")}
+$("#exit").onclick=leave;let last=0;addEventListener("keydown",e=>{if(e.key=="Escape"){const n=Date.now();if(n-last<800)leave();last=n}});
+render();
+</script></body></html>
