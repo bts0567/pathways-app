@@ -424,8 +424,10 @@ function renderHomeTab() {
     <div class="card">
       <h3>Start here</h3>
       <p class="mute">Answer a few questions to see which legal topics apply to you.</p>
-      <button class="btn" onclick="goToTab('roadmap')">Build my roadmap</button>
-      <button class="btn alt" onclick="goToTab('learn')">Browse topics</button>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.5rem">
+        <button class="btn" onclick="goToTab('roadmap')">Build my roadmap</button>
+        <button class="btn alt" onclick="goToTab('learn')">Browse topics</button>
+      </div>
     </div>
     <div class="card">
       <h3>Good to know</h3>
